@@ -325,7 +325,7 @@ const DraftPage: React.FC = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {draftTargets.top_targets.slice(0, 10).map((player) => (
+                      {(draftTargets.top_targets || []).slice(0, 10).map((player) => (
                         <TableRow key={player.player.id}>
                           <TableCell>{player.overall_rank}</TableCell>
                           <TableCell>
@@ -369,11 +369,11 @@ const DraftPage: React.FC = () => {
             <Typography variant="h6" gutterBottom>
               Targets by Position
             </Typography>
-            {Object.entries(draftTargets.targets_by_position).map(([position, players]) => (
+            {Object.entries(draftTargets.targets_by_position || {}).map(([position, players]) => (
               <Accordion key={position}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="h6">
-                    {position} ({players.length} players)
+                    {position} ({players?.length || 0} players)
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -390,7 +390,7 @@ const DraftPage: React.FC = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {players.slice(0, 5).map((player) => (
+                        {(players || []).slice(0, 5).map((player) => (
                           <TableRow key={player.player.id}>
                             <TableCell>{player.overall_rank}</TableCell>
                             <TableCell>{player.player.name}</TableCell>
@@ -435,7 +435,7 @@ const DraftPage: React.FC = () => {
               Players grouped by their draft value relative to replacement level
             </Typography>
 
-            {Object.entries(valueTiers.value_tiers).map(([tierName, players]) => (
+            {Object.entries(valueTiers.value_tiers || {}).map(([tierName, players]) => (
               <Accordion key={tierName} defaultExpanded={tierName === 'Elite'}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Box display="flex" alignItems="center" gap={2}>
@@ -444,7 +444,7 @@ const DraftPage: React.FC = () => {
                       sx={{ bgcolor: getTierColor(tierName), color: 'white', fontWeight: 'bold' }}
                     />
                     <Typography variant="h6">
-                      {players.length} players
+                      {players?.length || 0} players
                     </Typography>
                   </Box>
                 </AccordionSummary>
@@ -462,7 +462,7 @@ const DraftPage: React.FC = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {players.map((player) => (
+                        {(players || []).map((player) => (
                           <TableRow key={player.player.id}>
                             <TableCell>{player.overall_rank}</TableCell>
                             <TableCell>
@@ -612,7 +612,7 @@ const DraftPage: React.FC = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {comparisonResult.comparison.map((player) => (
+                    {(comparisonResult.comparison || []).map((player) => (
                       <TableRow key={player.player.id}>
                         <TableCell>
                           <Box>
