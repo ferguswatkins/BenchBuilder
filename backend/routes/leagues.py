@@ -4,6 +4,7 @@ League-related API routes
 from fastapi import APIRouter, HTTPException, Header
 from typing import Optional, Dict, Any
 from auth.yahoo_auth import yahoo_auth
+from services.yahoo_data_service import yahoo_data_service
 from authlib.integrations.base_client import OAuthError
 
 router = APIRouter(prefix="/api", tags=["leagues"])
@@ -87,6 +88,62 @@ async def get_league_players(
         raise HTTPException(status_code=401, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to retrieve league players: {str(e)}")
+
+@router.post("/yahoo/import-projections")
+async def import_yahoo_projections(
+    authorization: str = Header(..., description="Bearer {access_token}"),
+    league_key: Optional[str] = None
+):
+    """
+    Import player projections from Yahoo Fantasy API
+    """
+    try:
+        if not authorization.startswith("Bearer "):
+            raise HTTPException(status_code=401, detail="Invalid authorization header format")
+        
+        access_token = authorization.split(" ")[1]
+        
+        # Fetch and store Yahoo player data
+        result = await yahoo_data_service.fetch_and_store_player_projections(access_token, league_key)
+        
+        if result["success"]:
+            return {
+                "message": result["message"],
+                "data": {
+                    "players_fetched": result["players_fetched"],
+                    "projections_stored": result["projections_stored"],
+                    "game_info": result.get("game_info", {})
+                }
+            }
+        else:
+            raise HTTPException(status_code=500, detail=result["message"])
+            
+    except OAuthError as e:
+        raise HTTPException(status_code=401, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to import Yahoo projections: {str(e)}")
+
+@router.get("/yahoo/game-info")
+async def get_yahoo_game_info(authorization: str = Header(..., description="Bearer {access_token}")):
+    """
+    Get current Yahoo Fantasy game information
+    """
+    try:
+        if not authorization.startswith("Bearer "):
+            raise HTTPException(status_code=401, detail="Invalid authorization header format")
+        
+        access_token = authorization.split(" ")[1]
+        
+        game_info = await yahoo_auth.get_game_info(access_token, "nfl")
+        
+        return {
+            "message": "Game info retrieved successfully",
+            "data": game_info
+        }
+    except OAuthError as e:
+        raise HTTPException(status_code=401, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve game info: {str(e)}")
 
 @router.get("/test-auth")
 async def test_authentication(authorization: str = Header(..., description="Bearer {access_token}")):

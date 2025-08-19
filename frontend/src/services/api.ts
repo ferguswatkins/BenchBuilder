@@ -132,6 +132,49 @@ export class ApiService {
     }
   }
 
+  // Yahoo Fantasy API endpoints
+  static async importYahooProjections(accessToken: string, leagueKey?: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await apiClient.post('/api/yahoo/import-projections', 
+        leagueKey ? { league_key: leagueKey } : {},
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }
+      );
+      return { data: response.data };
+    } catch (error: any) {
+      return { error: error.response?.data?.detail || error.message };
+    }
+  }
+
+  static async getYahooGameInfo(accessToken: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await apiClient.get('/api/yahoo/game-info', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      return { data: response.data };
+    } catch (error: any) {
+      return { error: error.response?.data?.detail || error.message };
+    }
+  }
+
+  static async getUserLeagues(accessToken: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await apiClient.get('/api/leagues', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      return { data: response.data };
+    } catch (error: any) {
+      return { error: error.response?.data?.detail || error.message };
+    }
+  }
+
   // Health check
   static async healthCheck(): Promise<{ status: string }> {
     const response = await apiClient.get('/health');

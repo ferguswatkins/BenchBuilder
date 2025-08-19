@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import RankingsPage from './pages/RankingsPage';
 import DraftPage from './pages/DraftPage';
 import ComparePage from './pages/ComparePage';
+import DataPage from './pages/DataPage';
 import './App.css';
 
 // Create a fantasy football themed Material-UI theme
@@ -55,6 +56,7 @@ function App() {
             <Route path="/rankings" element={<RankingsPage />} />
             <Route path="/draft" element={<DraftPage />} />
             <Route path="/compare" element={<ComparePage />} />
+            <Route path="/data" element={<DataPage />} />
           </Routes>
         </Layout>
       </Router>

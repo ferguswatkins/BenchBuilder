@@ -19,6 +19,7 @@ import {
   Assessment as AssessmentIcon,
   Sports as SportsIcon,
   Compare as CompareIcon,
+  CloudUpload as DataIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -38,6 +39,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { text: 'Rankings', icon: <AssessmentIcon />, path: '/rankings' },
     { text: 'Draft Prep', icon: <SportsIcon />, path: '/draft' },
     { text: 'Compare', icon: <CompareIcon />, path: '/compare' },
+    { text: 'Data', icon: <DataIcon />, path: '/data' },
   ];
 
   const handleDrawerToggle = () => {

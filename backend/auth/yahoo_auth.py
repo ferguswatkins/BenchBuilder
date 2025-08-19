@@ -36,7 +36,7 @@ class YahooAuth:
             "client_id": self.client_id,
             "redirect_uri": self.redirect_uri,
             "response_type": "code",
-            "scope": "fspt-r",  # Fantasy Sports Read - now that OAuth works
+            "scope": "upload",  # Yahoo Fantasy Sports scope
             "state": state
         }
         
@@ -141,6 +141,36 @@ class YahooAuth:
         Get players in a league
         """
         endpoint = f"league/{league_key}/players;start={start};count={count}"
+        return await self.make_api_request(endpoint, access_token)
+    
+    async def get_player_stats(self, access_token: str, player_key: str, stat_type: str = "season") -> Dict[str, Any]:
+        """
+        Get player statistics
+        stat_type: 'season', 'lastweek', 'lastmonth'
+        """
+        endpoint = f"player/{player_key}/stats;type={stat_type}"
+        return await self.make_api_request(endpoint, access_token)
+    
+    async def get_all_players(self, access_token: str, game_key: str = "nfl", start: int = 0, count: int = 25) -> Dict[str, Any]:
+        """
+        Get all available players for a game (NFL)
+        """
+        endpoint = f"game/{game_key}/players;start={start};count={count}"
+        return await self.make_api_request(endpoint, access_token)
+    
+    async def get_player_ownership(self, access_token: str, league_key: str, player_keys: list) -> Dict[str, Any]:
+        """
+        Get player ownership information in a league
+        """
+        player_key_str = ",".join(player_keys)
+        endpoint = f"league/{league_key}/players;player_keys={player_key_str}/ownership"
+        return await self.make_api_request(endpoint, access_token)
+    
+    async def get_game_info(self, access_token: str, game_key: str = "nfl") -> Dict[str, Any]:
+        """
+        Get game information (current NFL season info)
+        """
+        endpoint = f"game/{game_key}"
         return await self.make_api_request(endpoint, access_token)
     
     def get_token(self, state: str) -> Optional[Dict[str, Any]]:
