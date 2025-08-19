@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Box,
-  Grid2 as Grid,
   Card,
   CardContent,
   FormControl,
@@ -178,7 +177,7 @@ const DraftPage: React.FC = () => {
     <Box>
       {/* Header */}
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+      <Typography variant="h4" component="h1" gutterBottom>
           <TrophyIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
           Draft Dashboard
         </Typography>
@@ -190,51 +189,54 @@ const DraftPage: React.FC = () => {
       {/* Configuration Controls */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Grid container spacing={2} alignItems="center">
-            <Grid xs={12} sm={3}>
-              <FormControl fullWidth>
-                <InputLabel>Scoring Type</InputLabel>
-                <Select
-                  value={scoringType}
-                  onChange={(e) => setScoringType(e.target.value as ScoringType)}
-                >
-                  <MenuItem value="standard">Standard</MenuItem>
-                  <MenuItem value="ppr">PPR</MenuItem>
-                  <MenuItem value="half_ppr">Half PPR</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid xs={12} sm={3}>
-              <TextField
-                fullWidth
-                label="League Size"
-                type="number"
-                value={numTeams}
-                onChange={(e) => setNumTeams(parseInt(e.target.value))}
-                inputProps={{ min: 8, max: 16 }}
-              />
-            </Grid>
-            <Grid xs={12} sm={3}>
-              <TextField
-                fullWidth
-                label="Draft Position"
-                type="number"
-                value={draftPosition}
-                onChange={(e) => setDraftPosition(parseInt(e.target.value))}
-                inputProps={{ min: 1, max: numTeams }}
-              />
-            </Grid>
-            <Grid xs={12} sm={3}>
-              <TextField
-                fullWidth
-                label="Round"
-                type="number"
-                value={selectedRound}
-                onChange={(e) => setSelectedRound(parseInt(e.target.value))}
-                inputProps={{ min: 1, max: 20 }}
-              />
-            </Grid>
-          </Grid>
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 2,
+              alignItems: 'center',
+              '& > *': {
+                flex: '1 1 200px',
+                minWidth: '200px',
+              },
+            }}
+          >
+            <FormControl fullWidth>
+              <InputLabel>Scoring Type</InputLabel>
+              <Select
+                value={scoringType}
+                onChange={(e) => setScoringType(e.target.value as ScoringType)}
+              >
+                <MenuItem value="standard">Standard</MenuItem>
+                <MenuItem value="ppr">PPR</MenuItem>
+                <MenuItem value="half_ppr">Half PPR</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              fullWidth
+              label="League Size"
+              type="number"
+              value={numTeams}
+              onChange={(e) => setNumTeams(parseInt(e.target.value))}
+              inputProps={{ min: 8, max: 16 }}
+            />
+            <TextField
+              fullWidth
+              label="Draft Position"
+              type="number"
+              value={draftPosition}
+              onChange={(e) => setDraftPosition(parseInt(e.target.value))}
+              inputProps={{ min: 1, max: numTeams }}
+            />
+            <TextField
+              fullWidth
+              label="Round"
+              type="number"
+              value={selectedRound}
+              onChange={(e) => setSelectedRound(parseInt(e.target.value))}
+              inputProps={{ min: 1, max: 20 }}
+            />
+          </Box>
         </CardContent>
       </Card>
 
@@ -503,79 +505,81 @@ const DraftPage: React.FC = () => {
           Draft Strategy Guide
         </Typography>
         
-        <Grid container spacing={3}>
-          <Grid xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Your Draft Setup
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemText
-                      primary="League Size"
-                      secondary={`${numTeams} teams`}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Scoring System"
-                      secondary={scoringType.toUpperCase()}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Draft Position"
-                      secondary={`Pick ${draftPosition} of ${numTeams}`}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Current Focus"
-                      secondary={`Round ${selectedRound} preparation`}
-                    />
-                  </ListItem>
-                </List>
-              </CardContent>
-            </Card>
-          </Grid>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+            gap: 3,
+          }}
+        >
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Your Draft Setup
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemText
+                    primary="League Size"
+                    secondary={`${numTeams} teams`}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Scoring System"
+                    secondary={scoringType.toUpperCase()}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Draft Position"
+                    secondary={`Pick ${draftPosition} of ${numTeams}`}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Current Focus"
+                    secondary={`Round ${selectedRound} preparation`}
+                  />
+                </ListItem>
+              </List>
+            </CardContent>
+          </Card>
           
-          <Grid xs={12} md={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Draft Tips
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemText
-                      primary="Value Over Replacement"
-                      secondary="Focus on VOR rather than just projected points"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Tier-Based Drafting"
-                      secondary="Draft the last player in a tier before moving to next position"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Position Scarcity"
-                      secondary="Consider how quickly positions are being drafted"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText
-                      primary="Flexible Strategy"
-                      secondary="Adapt your plan based on how the draft unfolds"
-                    />
-                  </ListItem>
-                </List>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Draft Tips
+              </Typography>
+              <List>
+                <ListItem>
+                  <ListItemText
+                    primary="Value Over Replacement"
+                    secondary="Focus on VOR rather than just projected points"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Tier-Based Drafting"
+                    secondary="Draft the last player in a tier before moving to next position"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Position Scarcity"
+                    secondary="Consider how quickly positions are being drafted"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary="Flexible Strategy"
+                    secondary="Adapt your plan based on how the draft unfolds"
+                  />
+                </ListItem>
+              </List>
+            </CardContent>
+          </Card>
+        </Box>
       </TabPanel>
 
       {/* Player Comparison Dialog */}
@@ -614,10 +618,10 @@ const DraftPage: React.FC = () => {
                           <Box>
                             <Typography variant="body2" fontWeight="bold">
                               {player.player.name}
-                            </Typography>
+      </Typography>
                             <Typography variant="caption" color="text.secondary">
                               {player.player.team}
-                            </Typography>
+      </Typography>
                           </Box>
                         </TableCell>
                         <TableCell>{player.player.position}</TableCell>
